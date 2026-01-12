@@ -28,6 +28,7 @@ export default function MarketDetailScreen() {
   const setTrades = useMarketDetailStore((s: MarketDetailState) => s.setTrades);
   const { ready } = useEnsurePlayerReady();
 
+  // On mount, set the active market and hydrate from SQLite so UI has data even before live playback.
   useEffect(() => {
     if (marketId) {
       setMarket(marketId);
@@ -81,6 +82,7 @@ export default function MarketDetailScreen() {
             <AppButton title="Pause" onPress={pause} style={{ flex: 1 }} />
             <AppButton title="Restart" onPress={restart} style={{ flex: 1 }} />
         </View>
+        {/* Loader hint while events/seed data are being prepared */}
         {!ready && <Text style={{ color: colors.mutText, marginTop: 8 }}>Preparing data...</Text>}
       </Section>
 

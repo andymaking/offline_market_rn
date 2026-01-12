@@ -19,6 +19,7 @@ export default function MarketTradesScreen() {
 
   const [trades, setTrades] = useState<TradeRow[]>([]);
 
+  // Load trades from SQLite (populated by playback) for this market.
   useEffect(() => {
     if (!marketId) return;
     (async () => {
@@ -31,12 +32,14 @@ export default function MarketTradesScreen() {
     <Screen>
       <Stack.Screen options={{ title: marketId ? `${marketId} Trades` : 'Trades' }} />
 
+      {/* Playback controls: wait for bootstrap then allow starting/pausing/restarting the stream */}
       <Section title="Playback" right={<Text style={{ color: colors.mutText, fontWeight: '700' }}>Control stream</Text>}>
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <AppButton
             title="Play"
             tone="primary"
             onPress={async () => {
+              // Guard until assets are copied + player is hydrated
               if (!ready) return;
               await ensurePlayerAndPlay();
             }}
@@ -45,6 +48,7 @@ export default function MarketTradesScreen() {
           <AppButton title="Pause" onPress={pause} style={{ flex: 1 }} />
           <AppButton title="Restart" onPress={restart} style={{ flex: 1 }} />
         </View>
+        {/* Show status + a hint while bootstrap is in progress */}
         {!ready && <Text style={{ color: colors.mutText, marginTop: 8 }}>Preparing data...</Text>}
         <Text style={{ color: colors.mutText, marginTop: 8 }}>Status: {playbackStatus}</Text>
       </Section>

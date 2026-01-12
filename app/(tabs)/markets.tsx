@@ -5,9 +5,10 @@ import { FlatList, Pressable, Text, View } from 'react-native';
 import { Screen } from '@/components/layout/Screen';
 import { AppButton } from '@/components/ui/AppButton';
 import { Pill } from '@/components/ui/Pill';
-import { colors } from '@/theme/colors';
 import { useMarketStore, type Market } from '@/stores/marketStore';
+import { colors } from '@/theme/colors';
 
+// Starter data in case SQLite/stream hasn’t populated yet; real data is hydrated via playback + repos.
 const seed: Market[] = [
   { marketId: 'USDT-NGN', lastPrice: 1500, change24h: 0.021, isFavourite: false },
   { marketId: 'USDC-NGN', lastPrice: 1492, change24h: -0.008, isFavourite: true },
@@ -20,6 +21,7 @@ export default function MarketsScreen() {
   const toggleFavourite = useMarketStore((s) => s.toggleFavourite);
   const setActiveMarketId = useMarketStore((s) => s.setActiveMarketId);
 
+  // Hydrate UI with seed if nothing is loaded yet (e.g., before playback seeds SQLite).
   useEffect(() => {
     if (markets.length === 0) {
       setMarkets(seed);
