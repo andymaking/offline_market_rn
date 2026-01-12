@@ -1,0 +1,22 @@
+# Copilot Instructions for market_offline
+
+- Stack: Expo Router (file-based), React Native 0.81, React 19, TypeScript strict, alias `@/*`.
+- Entry/layout: `app/_layout.tsx` wraps ThemeProvider + Stack; routes `(tabs)` group and `modal` (presentation: 'modal').
+- Entry point: `package.json` main is `expo-router/entry` (typed routes enabled in `app.json`).
+- Tabs: `app/(tabs)/_layout.tsx` sets tabBar (HapticTab button, IconSymbol icons, active tint via Colors); screens `index` and `explore`.
+- Routing: add screens by creating files in `app/`; group folders like `(tabs)` do not change URLs; for new tabs also add `<Tabs.Screen>` entry.
+- Theming: palette in `constants/theme.ts`; `useThemeColor` selects light/dark; pass `lightColor`/`darkColor` overrides; avoid hardcoded colors—use `ThemedView`/`ThemedText`.
+- Fonts: platform-aware `Fonts` via `Platform.select` (rounded used in Explore header).
+- Components: Themed components (`components/themed-text.tsx`, `components/themed-view.tsx`); UI primitives (`components/ui/collapsible.tsx`, `components/ui/icon-symbol*.tsx`); helpers (`parallax-scroll-view.tsx`, `external-link.tsx`, `hello-wave.tsx`, `haptic-tab.tsx` iOS haptic on tab press).
+- Navigation patterns: use `expo-router` `Link` with Trigger/Menu/Preview (see `app/(tabs)/index.tsx`); tab icons via `IconSymbol`.
+- Platform specifics: Haptics gated by `process.env.EXPO_OS === 'ios'`; web via `react-native-web`; typed routes + React Compiler + new architecture enabled in `app.json`.
+- State: local hooks only; no global store.
+- Styling: prefer `StyleSheet.create`, theme colors, platform checks via `Platform.select`.
+- Dev workflows: `npm install`; start `npx expo start`; platform targets `npm run ios|android|web`; lint `npm run lint` (eslint-config-expo); reset starter `npm run reset-project`.
+- Dev shortcuts: dev menu `cmd+d` (iOS) / `cmd+m` (Android); web DevTools `F12`.
+- Tests: none preconfigured; rely on manual checks and lint.
+- Lint config: extends `eslint-config-expo/flat`, ignores `dist/*`.
+- Assets: in `assets/images` (icons, splash, demo art); referenced in `app.json` and screens.
+- Path alias: import with `@/...` instead of relative walks.
+- Adding modals: create `app/<name>.tsx` and register Stack options with `presentation: 'modal'` in root layout.
+- External deps of note: expo-haptics, expo-image, expo-router, react-native-reanimated, @react-navigation/bottom-tabs/elements/native.
